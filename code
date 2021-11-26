@@ -1,0 +1,90 @@
+include 'emu8086.inc'
+org 100h
+.data
+N1 dw ?
+N2 dw ?
+Selected dw ?
+
+.code      
+
+proc main
+
+printn 'Enter number 1'
+call scan_num
+mov N1,cx
+
+printn 'Enter number 1'
+call scan_num
+mov N2,cx
+
+Selection proc
+printn '         calculator'
+printn 'which operation do you want to perform'
+printn '1)Addition'
+printn '2)Multiplication'
+printn '3)Subtraction'
+printn '4)Division'
+printn '5)End'
+
+call scan_num
+mov Selected,cx
+
+
+cmp Selected,1
+jz ADDITION  
+
+
+cmp Selected,2      
+jz MULTIPLICATION
+
+cmp Selected,3    
+jz SUBTRACTION
+
+cmp Selected,4
+jz DIVISION     
+
+cmp Selected,0
+jz real
+
+Selection ENDP
+
+
+ADDITION proc 
+    mov ax,N1
+    add ax,N2   
+    call print_num   
+    jmp Selection
+ADDITION ENDP
+
+MULTIPLICATION proc 
+    mov ax,N1        
+    mul N2           
+    call print_num   
+    jmp Selection
+MULTIPLICATION ENDP
+
+SUBTRACTION proc 
+    mov ax,N1
+    sub ax,N2          ;ax-N2
+    call print_num 
+    jmp Selection
+SUBTRACTION ENDP
+
+DIVISION proc 
+    mov ax,N1          ;Numerator
+    div N2          ;Denominator  
+    call print_num 
+    jmp Selection
+DIVISION ENDP
+
+real proc
+    ret
+real ENdP
+
+
+DEFINE_GET_STRING
+DEFINE_PRINT_STRING       
+DEFINE_SCAN_NUM
+DEFINE_PRINT_NUM
+DEFINE_PRINT_NUM_UNS
+End main 
